@@ -9,7 +9,10 @@ function App() {
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>
-          <TodoItem />
+          <TodoItem title="đi chợ" />
+          <TodoItem title="đi học" />
+          <TodoItem title="đi chơi" />
+          <TodoItem title="CoderX" />
           Edit <code>src/App.js</code> and save to reload.
         </p>
         <a
