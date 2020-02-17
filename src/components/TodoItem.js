@@ -6,6 +6,7 @@ class TodoItem extends Component {
         <p>Đi chợ</p>
         <p>Nghe nhạc</p>
         <p>todo-list</p>
+        <p>Đi học</p>
       </div>
     );
   }
