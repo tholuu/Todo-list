@@ -5,10 +5,24 @@
     sans-serif;
     font-weight: 300;
     font-size: 24px;
+    height: 100%;
     color: #7b7b7b;
+    display: flex;    
+    padding: 10px 0 10px 5px;
+    align-items: center;
+    border-bottom: 1px solid #6b6b6b3d;  
 }
 
-.TodoItem-complete {
+.TodoItem > p {
+    margin: 0 10px;
+    width: 80%;
+}
+ .TodoItem > img {
+     padding: 5px;
+     width: 32px;
+     margin-right: 5px;
+ }
+.TodoItem-complete > p{
     text-decoration: line-through;
     opacity: .3;
 }

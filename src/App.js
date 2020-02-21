@@ -1,20 +1,31 @@
 import React, { Component } from "react";
 import TodoItem from "./components/TodoItem";
+import correct from '../src/img/correct.svg';
+import classNames from 'classnames';
 import "./App.css";
 
 class App extends Component {
   constructor() {
     super();
     this.state = {
+      valueInput: '',
+      leftItem: 'left item',
+      currentFilter: 'all',
       todoItems: [
-        { title: "đi chợ" },
-        { title: "đi học" },
-        { title: "đi chơi" },
-        { title: "đi đú", }
+        // { title: " đi chợ đi chợ đi chợ đi chợ đi chợ đi chợ đi chợ đi chợ đi chợ", isComplete: false },
+        // { title: "đi học", isComplete: false },
+        // { title: "đi chơi", isComplete: false },
+        // { title: "đi đú", isComplete: false }
       ]
     }
 
     this.onItemClick = this.onItemClick.bind(this)
+    this.onKeyUp = this.onKeyUp.bind(this)
+    this.onChange = this.onChange.bind(this)
+    this.onClickAll = this.onClickAll.bind(this)
+    this.onClickActive = this.onClickActive.bind(this)
+    this.onClickComplete = this.onClickComplete.bind(this)
+    this.onClick = this.onClick.bind(this)
   }
 
   onItemClick(item) {
@@ -37,8 +48,77 @@ class App extends Component {
     };
   }
 
+  onKeyUp(event) {
+
+    let keyCode = event.keyCode
+    let value = event.target.value;
+    let { todoItems } = this.state
+
+    if (keyCode === 13) {
+      if (!value) {
+        return;
+      }
+
+      value = value.trim() // xóa dấu cách ở đầu và cuối
+
+      if (!value) {
+        return;
+      }
+
+      this.setState({
+        valueInput: '',
+        todoItems: [
+          {
+            title: value, isComplete: false
+          },
+          ...todoItems
+        ]
+      })
+    }
+  }
+
+  onChange(event) {
+    this.setState({
+      valueInput: event.target.value
+    })
+  }
+
+  onClickAll() {
+    console.log(this.state.currentFilter)
+    this.setState({
+      currentFilter: 'all'
+    })
+  }
+
+  onClickActive() {
+    console.log(this.state.currentFilter)
+    this.setState({
+      currentFilter: 'active'
+    })
+  }
+
+  onClickComplete() {
+    console.log(this.state.currentFilter)
+    this.setState({
+      currentFilter: 'complete'
+    })
+  }
+
+  onClick() {
+    // this.state.todoItems.filter(function (item) {
+    //   if (item.isComplete === false) {
+    //     this.setState({
+    //       todoItems: [
+    //         ...this.state.todoItems
+    //       ]
+    //     })
+    //   }
+    // })
+    console.log(this.state.isComplete)
+  }
 
   render() {
+    console.log(this.state.currentFilter)
     //conditional rendering use if else
     // if (this.todoItems.length > 0) {
     //   return (
@@ -57,13 +137,50 @@ class App extends Component {
     // }
 
     //conditional redering use &&
-    const { todoItems } = this.state
-    // console.log(this.state.item)
+    const { todoItems, valueInput, leftItem, currentFilter } = this.state
+    let filterItem = [];
+    if (currentFilter === 'all') {
+      filterItem = todoItems
+    }
+
+    if (currentFilter === 'active') {
+      todoItems.filter(function (item) {
+        if (item.isComplete === false) {
+          return filterItem.push(item)
+        }
+      })
+    }
+
+    if (currentFilter === 'complete') {
+      todoItems.filter(function (item) {
+        if (item.isComplete === true) {
+          return filterItem.push(item)
+        }
+      })
+    }
+    let numbers = todoItems.filter(function (item) {
+      if (item.isComplete === false) {
+        return item
+      }
+    })
+
+
 
     return (
+
       < div className="App" >
+        <div className="Hearder" >
+          <img onClick={this.onClick} className="Check-all-complete" src={correct} width={20} />
+          <input
+            type="text"
+            placeholder=" item"
+            onKeyUp={this.onKeyUp}
+            value={valueInput}
+            onChange={this.onChange}
+          />
+        </div>
         {
-          todoItems.length > 0 && todoItems.map((item, index) =>
+          filterItem.length > 0 && filterItem.map((item, index) =>
             <TodoItem
               onClick={this.onItemClick(item)}
               key={index}
@@ -71,9 +188,15 @@ class App extends Component {
             />)
         }
 
-        {
-          todoItems.length === 0 && 'nothing here'
-        }
+
+        <div className={classNames('currentFilter', { filerHidden: todoItems.length === 0 })} >
+          <span>{numbers.length} left item</span>
+          <div className="filterButton">
+            <button onClick={this.onClickAll}>All</button>
+            <button onClick={this.onClickActive}>Active</button>
+            <button onClick={this.onClickComplete}>Complete</button>
+          </div>
+        </div>
       </div >
     )
   }

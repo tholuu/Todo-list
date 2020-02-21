@@ -1,5 +1,7 @@
 import React, { Component } from "react";
-import classNames from 'classnames/'
+import classNames from 'classnames/';
+import check from '../img/check.svg';
+import checkDone from '../img/check-done.svg'
 import './TodoItem.css';
 class TodoItem extends Component {
   constructor(props) {
@@ -13,12 +15,17 @@ class TodoItem extends Component {
     //   className += " TodoItem-complete";
     // }
 
+    let checkImg = check;
+
+    if (item.isComplete) {
+      checkImg = checkDone
+    }
+
     return (
       //dynamic class use npm package classnames
-      <div onClick={onClick} className={classNames('TodoItem', { 'TodoItem-complete': item.isComplete === true })}>
-        <p>
-          {this.props.item.title}
-        </p>
+      <div className={classNames('TodoItem', { 'TodoItem-complete': item.isComplete === true })}>
+        <img onClick={onClick} src={checkImg} width={32} height={32} />
+        <p>{this.props.item.title}</p>
       </div>
     );
   }
