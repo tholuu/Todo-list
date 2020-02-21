@@ -17,8 +17,8 @@
   opacity: 0.2;
 }
 
-.App .Hearder .Check-all-complete:focus {
-  opacity: 1;
+.App .all-click {
+  opacity: .5;
 }
 
 .App .Hearder > input {

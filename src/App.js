@@ -4,6 +4,9 @@ import correct from '../src/img/correct.svg';
 import classNames from 'classnames';
 import "./App.css";
 
+
+let filterItem = [];
+
 class App extends Component {
   constructor() {
     super();
@@ -11,11 +14,9 @@ class App extends Component {
       valueInput: '',
       leftItem: 'left item',
       currentFilter: 'all',
+      isComoleteAll: false,
       todoItems: [
-        // { title: " đi chợ đi chợ đi chợ đi chợ đi chợ đi chợ đi chợ đi chợ đi chợ", isComplete: false },
-        // { title: "đi học", isComplete: false },
-        // { title: "đi chơi", isComplete: false },
-        // { title: "đi đú", isComplete: false }
+        { title: "đi đú", isComplete: false }
       ]
     }
 
@@ -33,7 +34,6 @@ class App extends Component {
       console.log('item')
       const isComplete = item.isComplete
       const { todoItems } = this.state
-
       const index = todoItems.indexOf(item)
       this.setState({
         todoItems: [
@@ -105,20 +105,25 @@ class App extends Component {
   }
 
   onClick() {
-    // this.state.todoItems.filter(function (item) {
-    //   if (item.isComplete === false) {
-    //     this.setState({
-    //       todoItems: [
-    //         ...this.state.todoItems
-    //       ]
-    //     })
-    //   }
-    // })
-    console.log(this.state.isComplete)
+    let { isComoleteAll, todoItems, isComplete } = this.state
+    let newTodoItem = []
+    todoItems.filter((item) => {
+      if (todoItems.isComplete === false) {
+        return {
+          item
+        }
+      }
+    })
+
+    this.setState({
+      isComoleteAll: !isComoleteAll,
+      todoItems: [
+        //  
+      ]
+    })
   }
 
   render() {
-    console.log(this.state.currentFilter)
     //conditional rendering use if else
     // if (this.todoItems.length > 0) {
     //   return (
@@ -137,8 +142,7 @@ class App extends Component {
     // }
 
     //conditional redering use &&
-    const { todoItems, valueInput, leftItem, currentFilter } = this.state
-    let filterItem = [];
+    const { todoItems, valueInput, isComoleteAll, currentFilter } = this.state
     if (currentFilter === 'all') {
       filterItem = todoItems
     }
@@ -158,19 +162,17 @@ class App extends Component {
         }
       })
     }
+
     let numbers = todoItems.filter(function (item) {
       if (item.isComplete === false) {
         return item
       }
     })
 
-
-
     return (
-
       < div className="App" >
         <div className="Hearder" >
-          <img onClick={this.onClick} className="Check-all-complete" src={correct} width={20} />
+          <img onClick={this.onClick} className={classNames("Check-all-complete", { 'all-click': isComoleteAll })} src={correct} width={20} />
           <input
             type="text"
             placeholder=" item"
@@ -187,8 +189,6 @@ class App extends Component {
               item={item}
             />)
         }
-
-
         <div className={classNames('currentFilter', { filerHidden: todoItems.length === 0 })} >
           <span>{numbers.length} left item</span>
           <div className="filterButton">
