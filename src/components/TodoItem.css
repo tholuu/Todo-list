@@ -26,3 +26,7 @@
     text-decoration: line-through;
     opacity: .3;
 }
+
+.display {
+    display: none;
+}

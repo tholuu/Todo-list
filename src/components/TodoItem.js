@@ -23,7 +23,7 @@ class TodoItem extends Component {
 
     return (
       //dynamic class use npm package classnames
-      <div className={classNames('TodoItem', { 'TodoItem-complete': item.isComplete === true })}>
+      <div className={classNames('TodoItem', { 'TodoItem-complete': item.isComplete }, { display: item.isDisplay })}>
         <img onClick={onClick} src={checkImg} width={32} height={32} />
         <p>{this.props.item.title}</p>
       </div>

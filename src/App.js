@@ -16,7 +16,7 @@ class App extends Component {
       currentFilter: 'all',
       isComoleteAll: false,
       todoItems: [
-        { title: "đi đú", isComplete: false }
+        { title: "đi đú", isComplete: false, isDisplay: false }
       ]
     }
 
@@ -31,7 +31,6 @@ class App extends Component {
 
   onItemClick(item) {
     return (event) => {
-      console.log('item')
       const isComplete = item.isComplete
       const { todoItems } = this.state
       const index = todoItems.indexOf(item)
@@ -69,7 +68,7 @@ class App extends Component {
         valueInput: '',
         todoItems: [
           {
-            title: value, isComplete: false
+            title: value, isComplete: false, isDisplay: false
           },
           ...todoItems
         ]
@@ -86,41 +85,75 @@ class App extends Component {
   onClickAll() {
     console.log(this.state.currentFilter)
     this.setState({
-      currentFilter: 'all'
+      currentFilter: 'all',
+      isDisplay: false
     })
   }
 
   onClickActive() {
-    console.log(this.state.currentFilter)
-    this.setState({
-      currentFilter: 'active'
+    let { todoItems } = this.state
+    todoItems.map(function (item, index) {
+      if (item.isComplete === true) {
+        this.setState({
+          currentFilter: 'active',
+          todoItems: [
+            ...todoItems.slice(0, index),
+            {
+              ...item, isDisplay: true
+            },
+            ...todoItems.slice(index + 1)
+          ]
+        })
+      }
     })
+    console.log(todoItems)
   }
 
   onClickComplete() {
-    console.log(this.state.currentFilter)
-    this.setState({
-      currentFilter: 'complete'
+    let { todoItems } = this.state
+    let filterItem = [];
+    todoItems.filter((item, index) => {
+      if (item.isComplete === false) {
+        return filterItem.push(item)
+      }
     })
+
+    for (let i = 0; i < filterItem.length; i++) {
+      let index = todoItems.indexOf(filterItem[i])
+      // this.setState({
+      //   isComoleteAll: 'complete',
+      //   todoItems: [
+      //     ...todoItems.slice(0, index),
+      //     {
+      //       ...filterItem[index],
+      //       isDisplay: true,
+      //     },
+      //     ...todoItems.slice(index)
+      //   ]
+      // })
+    }
+
+
+
+    console.log(filterItem)
   }
 
   onClick() {
     let { isComoleteAll, todoItems, isComplete } = this.state
     let newTodoItem = []
-    todoItems.filter((item) => {
-      if (todoItems.isComplete === false) {
-        return {
-          item
-        }
-      }
+    todoItems.map((item, index) => {
+      // this.setState({
+      //   isComoleteAll: !isComoleteAll,
+      //   todoItems: [
+      //     ...todoItems.slice(0, index),
+      //     {
+      //       ...item, isComplete: true
+      //     },
+      //     ...todoItems.slice(index + 1)
+      //   ]
+      // })
     })
 
-    this.setState({
-      isComoleteAll: !isComoleteAll,
-      todoItems: [
-        //  
-      ]
-    })
   }
 
   render() {
@@ -142,26 +175,7 @@ class App extends Component {
     // }
 
     //conditional redering use &&
-    const { todoItems, valueInput, isComoleteAll, currentFilter } = this.state
-    if (currentFilter === 'all') {
-      filterItem = todoItems
-    }
-
-    if (currentFilter === 'active') {
-      todoItems.filter(function (item) {
-        if (item.isComplete === false) {
-          return filterItem.push(item)
-        }
-      })
-    }
-
-    if (currentFilter === 'complete') {
-      todoItems.filter(function (item) {
-        if (item.isComplete === true) {
-          return filterItem.push(item)
-        }
-      })
-    }
+    const { todoItems, valueInput, isComoleteAll, currentFilter, isDisplay } = this.state
 
     let numbers = todoItems.filter(function (item) {
       if (item.isComplete === false) {
@@ -182,7 +196,7 @@ class App extends Component {
           />
         </div>
         {
-          filterItem.length > 0 && filterItem.map((item, index) =>
+          todoItems.length > 0 && todoItems.map((item, index) =>
             <TodoItem
               onClick={this.onItemClick(item)}
               key={index}
@@ -193,7 +207,7 @@ class App extends Component {
           <span>{numbers.length} left item</span>
           <div className="filterButton">
             <button onClick={this.onClickAll}>All</button>
-            <button onClick={this.onClickActive}>Active</button>
+            <button onClick={() => this.onClickActive}>Active</button>
             <button onClick={this.onClickComplete}>Complete</button>
           </div>
         </div>
